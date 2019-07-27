@@ -3,6 +3,10 @@ package com.ubiquisoft.evaluation.domain;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
+
+import com.ubiquisoft.evaluation.CarPartValidator;
+
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -30,8 +34,14 @@ public class Car {
 		 *          "TIRE": 3
 		 *      }
 		 */
-
-		return null;
+		
+		/*
+		 note: I put the validation into another class to avoid
+		 cluttering our domain model with validation logic.
+		*/
+		
+		CarPartValidator validator = new CarPartValidator();
+		return validator.getMissingParts(this);
 	}
 
 	@Override
@@ -43,7 +53,7 @@ public class Car {
 				       ", parts=" + parts +
 				       '}';
 	}
-
+	
 	/* --------------------------------------------------------------------------------------------------------------- */
 	/*  Getters and Setters *///region
 	/* --------------------------------------------------------------------------------------------------------------- */

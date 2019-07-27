@@ -1,5 +1,11 @@
 .DS_Store
 
+.classpath
+.project
+.settings
+
 .idea/workspace.xml
 .idea/tasks.xml
 .idea/dictionaries
+/bin/
+/target/

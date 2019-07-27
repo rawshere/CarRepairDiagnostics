@@ -9,10 +9,13 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import java.io.InputStream;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 public class CarDiagnosticEngine {
 
-	public void executeDiagnostics(Car car) {
+	public void executeDiagnostics(Car car) throws DiagnosticFailedException {
 		/*
 		 * Implement basic diagnostics and print results to console.
 		 *
@@ -38,10 +41,94 @@ public class CarDiagnosticEngine {
 		 * Treat the console as information being read by a user of this application. Attempts should be made to ensure
 		 * console output is as least as informative as the provided methods.
 		 */
-
-
+		
+		// first - data fields are present
+		validateDataFieldsPresent(car);
+		
+		// second - no parts are missing
+		validateNoPartsMissing(car);
+		
+		// third - all parts are in working condition
+		validateWorkingCondition(car);
+		
+		// fourth - validation succeeded
+		String msg = String.format("Validation succeeded for %s", car.toString());
+		System.out.println(msg);
 	}
 
+	private void validateWorkingCondition(Car car) throws DiagnosticFailedException {
+		boolean valid = true;
+		
+		List<Part> parts = car.getParts();
+	
+		int damagedCount = 0;
+		for (Part part : parts) {
+			if (!part.isInWorkingCondition()) {
+				valid = false;
+				
+				printDamagedPart(part.getType(), part.getCondition());
+				damagedCount++;
+			}
+		}
+		
+		if (!valid) {
+			String msg = String.format("found %s damaged parts", damagedCount);
+			throw new DiagnosticFailedException(msg);
+		}
+	}
+
+	private void validateNoPartsMissing(Car car) throws DiagnosticFailedException {
+
+		Map<PartType, Integer> missingParts = car.getMissingPartsMap();
+		if (!missingParts.isEmpty()) {
+			//found missing parts, invalid
+			
+			int missingCount = 0;
+
+			for (Map.Entry<PartType, Integer> entry : missingParts.entrySet()) {
+				printMissingPart(entry.getKey(), entry.getValue());
+				missingCount+= entry.getValue();
+			}
+			
+			String msg = String.format("found %s missing parts", missingCount);
+			throw new DiagnosticFailedException(msg);
+		}
+	}
+
+	private void validateDataFieldsPresent(Car car) throws DiagnosticFailedException {
+		boolean valid = true;
+		List<String> missingFields = new LinkedList<String>();
+		
+		if (isBlank(car.getYear())) {
+			valid = false;
+			missingFields.add("year");
+		}
+		
+		if (isBlank(car.getMake())) {
+			valid = false;
+			missingFields.add("make");
+		}
+		
+		if (isBlank(car.getModel())) {
+			valid = false;
+			missingFields.add("model");
+		}
+		
+		if (!valid) {
+			String fields = String.join(",", missingFields);
+			String msg = String.format("missing fields: %s", fields);
+			
+			throw new DiagnosticFailedException(msg);
+		}
+	}
+
+	//note could have used Apache StringUtils here instead
+	private boolean isBlank(String value) {
+		if(value==null || value.isEmpty()){
+		    return true;
+		} else return false;
+	}
+	
 	private void printMissingPart(PartType partType, Integer count) {
 		if (partType == null) throw new IllegalArgumentException("PartType must not be null");
 		if (count == null || count <= 0) throw new IllegalArgumentException("Count must be greater than 0");
@@ -57,6 +144,7 @@ public class CarDiagnosticEngine {
 	}
 
 	public static void main(String[] args) throws JAXBException {
+
 		// Load classpath resource
 		InputStream xml = ClassLoader.getSystemResourceAsStream("SampleCar.xml");
 
@@ -77,7 +165,13 @@ public class CarDiagnosticEngine {
 
 		CarDiagnosticEngine diagnosticEngine = new CarDiagnosticEngine();
 
-		diagnosticEngine.executeDiagnostics(car);
+		try {
+			diagnosticEngine.executeDiagnostics(car);
+			
+		} catch (DiagnosticFailedException e) {
+			String msg = String.format("Validation failed: %s", e.getMessage());
+			System.out.println(msg);
+		}
 
 	}
 
