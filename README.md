@@ -1,3 +1,11 @@
+
+# Run tests
+
+```
+mvn test
+```
+
+
 # Ubiquisoft Back End Developer Test (Car Repair Diagnostics)
 
 Welcome to the Ubiquisoft Back End developer test.
