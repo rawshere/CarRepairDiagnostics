@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<car>
+	<year>2006</year>
+	<make>Ford</make>
+	<model>Explorer</model>
+	<parts>
+		<inventoryId>engine</inventoryId>
+		<type>ENGINE</type>
+		<condition>USED</condition>
+	</parts>
+	<parts>
+		<inventoryId>electrical</inventoryId>
+		<type>ELECTRICAL</type>
+		<condition>NO_POWER</condition>
+	</parts>
+	<parts>
+		<inventoryId>tire</inventoryId>
+		<type>TIRE</type>
+		<condition>NEW</condition>
+	</parts>
+	<parts>
+		<inventoryId>tire</inventoryId>
+		<type>TIRE</type>
+		<condition>FLAT</condition>
+	</parts>
+	<parts>
+		<inventoryId>tire</inventoryId>
+		<type>TIRE</type>
+		<condition>WORN</condition>
+	</parts>
+	<parts>
+		<inventoryId>tire</inventoryId>
+		<type>TIRE</type>
+		<condition>NEW</condition>
+	</parts>
+	<parts>
+		<inventoryId>fuel_filter</inventoryId>
+		<type>FUEL_FILTER</type>
+		<condition>GOOD</condition>
+	</parts>
+	<parts>
+		<inventoryId>oil_filter</inventoryId>
+		<type>OIL_FILTER</type>
+		<condition>CLOGGED</condition>
+	</parts>
+</car>
