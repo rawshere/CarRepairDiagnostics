@@ -45,14 +45,14 @@ public class CarPartValidator {
 		for (Map.Entry<PartType, Integer> entry : REQUIRED_PARTS.entrySet()) {
 			PartType type = entry.getKey();
 			Integer requiredCount = entry.getValue();
-			
-			//if requirements not met then return actual count
+
 			Integer actualCount = partCount.get(type);
 			
 			if (actualCount == null) {
 				actualCount = 0;
 			}
 			
+			//if requirements not met then track number of missing parts
 			if (actualCount < requiredCount) {
 				missingParts.put(type, requiredCount - actualCount);
 			}
